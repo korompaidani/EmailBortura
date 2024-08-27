@@ -1,41 +1,70 @@
-<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-<script type="text/javascript">
-    (function() {
-        emailjs.init("");
-    })();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Form</title>
+</head>
+<body>
+    <form onsubmit="sendEmail(event)">
+        <label for="senderEmail">Sender Email:</label>
+        <input type="email" id="senderEmail" name="senderEmail" required><br><br>
 
-    function sendEmail(e) {
-        e.preventDefault();
+        <label for="senderName">Sender Full Name:</label>
+        <input type="text" id="senderName" name="senderName" required><br><br>
 
-        const senderEmail = document.getElementById('senderEmail').value;
-        const senderName = document.getElementById('senderName').value;
-        const participants = document.getElementById('participants').value;
-        const billingAddress = document.getElementById('billingAddress').value;
-        const participantsArray = participants.split(',');
-        const numberOfParticipants = participantsArray.length;
+        <label for="participants">List of Participants (comma separated):</label>
+        <textarea id="participants" name="participants" required></textarea><br><br>
 
-        const emailBody = `
-        Kedves Szervezők!
+        <label for="billingAddress">Billing Address:</label>
+        <textarea id="billingAddress" name="billingAddress" required></textarea><br><br>
 
-        ${numberOfParticipants} főre szeretnék nevezni az idei 2024.09.28-án megrendezésre kerülő Nyitott pincék túrára:
+        <button type="submit">Send Email</button>
+    </form>
 
-        ${participantsArray.join('\n')}
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script type="text/javascript">
+        function initializeEmailJS(apiKey) {
+            emailjs.init(apiKey);
+        }
 
-        Számlázási cím: ${billingAddress}
+        // Placeholder for the API key, will be replaced by GitHub Actions
+        initializeEmailJS("API_KEY_PLACEHOLDER");
 
-        Köszönettel,
-        ${senderName}
-        `;
+        function sendEmail(e) {
+            e.preventDefault();
 
-        emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
-            from_name: senderName,
-            from_email: senderEmail,
-            message: emailBody,
-            to_email: 'korompaidani@gmail.com'
-        }).then(function(response) {
-            alert('Email sent successfully!');
-        }, function(error) {
-            alert('Failed to send email');
-        });
-    }
-</script>
+            const senderEmail = document.getElementById('senderEmail').value;
+            const senderName = document.getElementById('senderName').value;
+            const participants = document.getElementById('participants').value;
+            const billingAddress = document.getElementById('billingAddress').value;
+            const participantsArray = participants.split(',');
+            const numberOfParticipants = participantsArray.length;
+
+            const emailBody = `
+            Kedves Szervezők!
+
+            ${numberOfParticipants} főre szeretnék nevezni az idei 2024.09.28-án megrendezésre kerülő Nyitott pincék túrára:
+
+            ${participantsArray.join('\n')}
+
+            Számlázási cím: ${billingAddress}
+
+            Köszönettel,
+            ${senderName}
+            `;
+
+            emailjs.send("service_z9ji235", "template_ggazijh", {
+                from_name: senderName,
+                from_email: senderEmail,
+                message: emailBody,
+                to_email: 'korompaidani@gmail.com'
+            }).then(function(response) {
+                alert('Email sent successfully!');
+            }, function(error) {
+                alert('Failed to send email');
+            });
+        }
+    </script>
+</body>
+</html>
